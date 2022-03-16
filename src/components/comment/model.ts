@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../user/model";
 import {Post} from "../post/model";
 
@@ -11,10 +11,12 @@ export class Comment {
     @Column()
     text: string
 
-    @Column()
+    @ManyToOne( () => User)
+    @JoinColumn()
     author: User
 
-    @Column({name:"reply_post"})
+    @ManyToOne( () => Post)
+    @JoinColumn({name:"reply_post"})
     reply_post: Post
 
 }

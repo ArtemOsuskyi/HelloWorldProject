@@ -1,14 +1,18 @@
 import * as express from 'express'
 import * as cors from 'cors'
+import * as session from "express-session";
+import * as connectRedis from 'connect-redis'
+import {createClient} from "redis";
 
-import "reflect-metadata";
+import "reflect-metadata"
 import {createConnection} from "typeorm";
 
 //import authRouter from "./components/auth/router";
-
 import * as dbConfig from "../ormconfig"
+import authRouter from "./components/auth/router";
 
 const PORT = 5050
+const RedisStore = connectRedis(session)
 
 createConnection(dbConfig.dbOptions).then(async () => {
 
@@ -30,7 +34,15 @@ createConnection(dbConfig.dbOptions).then(async () => {
     app.use(express.json())
     app.use(cors(options))
 
-   // app.use('/auth', authRouter)
+    app.use(session({
+        secret: process.env.SECRET_WORD,
+        store: new RedisStore({client: createClient(6379, 'localhost')}),
+        resave: false,
+        saveUninitialized: false
+        })
+    )
+
+    app.use('/auth', authRouter)
 
     app.listen(PORT)
     console.log(`App is running on port ${PORT}...`)

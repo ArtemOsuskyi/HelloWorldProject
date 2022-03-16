@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../user/model";
 
 @Entity()
@@ -19,8 +19,7 @@ export class Post {
     @Column()
     text: string
 
-    // @ManyToOne( () => User, user = user.post, {cascade: true})
-    // @JoinColumn({name: "creator_id"})
-    // creator: User
-
+    @ManyToOne( () => User)
+    @JoinColumn({name: "creator_id"})
+    creator: User
 }

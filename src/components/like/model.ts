@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../user/model";
 
 @Entity()
@@ -7,7 +7,8 @@ export class Like {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @ManyToOne( () => User)
+    @JoinColumn()
     user: User
 
     //TODO: more columns

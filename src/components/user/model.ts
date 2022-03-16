@@ -1,5 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
-import {Post} from "../post/model";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class User {
@@ -8,10 +7,10 @@ export class User {
     id: number;
 
     @Column()
-    login: string
+    name: string
 
     @Column()
-    name: string
+    username: string
 
     @Column()
     password: string
