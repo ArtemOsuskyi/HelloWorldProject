@@ -1,14 +1,15 @@
-import {getRepository} from "typeorm";
-import z from 'zod'
-import * as bcrypt from 'bcrypt'
-import {User} from "../user/model";
+import { getRepository } from "typeorm";
+import z from "zod";
+import * as bcrypt from "bcrypt";
+import { User } from "../user/model";
 
 const phonePattern: RegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
 const passPattern: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/
 const userSchema = z.object({
     name: z.string()
         .min(2, {message: "Name is too short"})
-        .max(50, {message: "Name is too long"}),
+        .max(50, {message: "Name is too long"})
+        .optional(),
     username: z.string().email() || z.string().regex(phonePattern, {message: "Username must be email or phone number"}),
     password: z.string()
         .min(6)
@@ -33,6 +34,7 @@ const register = async(name: string, username: string, password: string) => {
     await userRepository.save(user)
 }
 
+
 const login = async (username: string, password: string) => {
     const userRepository = getRepository(User)
 
@@ -42,10 +44,11 @@ const login = async (username: string, password: string) => {
     const userPassword = findUser.password
     if(!bcrypt.compareSync(password, userPassword)) throw new loginOrPasswordInvalid("Username or password are invalid")
 
-    return userSchema.parse({
+    userSchema.parse({
         username: username,
         password: password
     })
+
 }
 
 export { register, login }
