@@ -1,11 +1,11 @@
 import * as express from "express";
-import { logout, signin, signup } from "./controller";
+import { signin, signout, signup } from "./controller";
 
 const authRouter = express.Router();
 
 authRouter
-    .post('/register', signup)
-    .post('/login', signin)
-    .post('/logout', logout)
+  .post("/register", signup)
+  .post("/login", signin)
+  .post("/logout", signout);
 
-export default authRouter
+export default authRouter;
