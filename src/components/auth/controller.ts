@@ -6,15 +6,17 @@ import {
   logout,
   register,
 } from "./service";
+import { SessionData } from "express-session";
 
 const signup = async (req: Request, res: Response) => {
-  const session = req.session;
+  const session: SessionData = req.session;
   const { name, username, password } = req.body;
 
   await register(name, username, password)
-    .then(() => {
+    .then((userData) => {
+      session.userId = userData.id;
       session.authenticated = true;
-      return res.status(200).json({ message: "Signup successful" });
+      return res.status(200).json({ message: "Signup successful", session });
     })
     .catch((e) => {
       if (e instanceof idTaken)
@@ -26,13 +28,16 @@ const signup = async (req: Request, res: Response) => {
 };
 
 const signin = async (req: Request, res: Response) => {
-  const session = req.session;
+  const session: SessionData = req.session;
   const { username, password } = req.body;
 
   await login(username, password)
-    .then(() => {
+    .then((userData) => {
+      session.userId = userData.id;
       session.authenticated = true;
-      return res.status(200).json({ message: "Login successful. Welcome!" });
+      return res
+        .status(200)
+        .json({ message: "Login successful. Welcome!", session });
     })
     .catch((e) => {
       if (e instanceof loginOrPasswordInvalid)
