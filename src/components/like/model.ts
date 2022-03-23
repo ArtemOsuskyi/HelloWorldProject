@@ -1,16 +1,14 @@
-import {Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "../user/model";
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "../user/model";
 
-@Entity()
+@Entity({ name: "likes" })
 export class Like {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @ManyToOne(() => User)
+  @JoinColumn()
+  user: User;
 
-    @ManyToOne( () => User)
-    @JoinColumn()
-    user: User
-
-    //TODO: more columns
-
+  //TODO: more columns
 }

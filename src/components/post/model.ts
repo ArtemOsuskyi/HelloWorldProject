@@ -1,25 +1,36 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "../user/model";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { User } from "../user/model";
 
-@Entity()
+@Entity({ name: "posts" })
 export class Post {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @CreateDateColumn({ name: "created_at", type: "timestamp without time zone" })
+  createdAt: Date;
 
-    @Column({type: "timestamp without time zone"})
-    created: Date
+  @UpdateDateColumn({ name: "updated_at", type: "timestamp without time zone" })
+  updatedAt: Date;
 
-    @Column({name: "last_edited", type: "timestamp without time zone"})
-    lastEdited: Date
+  @Column()
+  title: string;
 
-    @Column()
-    title: string
+  @Column({
+    type: "text",
+  })
+  text: string;
 
-    @Column()
-    text: string
-
-    @ManyToOne( () => User)
-    @JoinColumn({name: "creator_id"})
-    creator: User
+  @Column({ name: "user_id" })
+  userId: number;
+  @ManyToOne((_type) => User, (user: User) => user.posts)
+  @JoinColumn({ name: "author_id" })
+  author: User;
 }

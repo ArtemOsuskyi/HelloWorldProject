@@ -1,21 +1,44 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { Post } from "../post/model";
+import { Comment } from "../comment/model";
 
-@Entity()
+@Entity({ name: "users" })
 export class User {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @CreateDateColumn({ name: "created_at" })
+  createdAt!: Date;
 
-    @Column()
-    name: string
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt!: Date;
 
-    @Column()
-    username: string
+  @Column()
+  name: string;
 
-    @Column()
-    password: string
+  @Column()
+  username!: string;
 
-    // @OneToMany( () => Post, post = post.creator, {onUpdate: "CASCADE"})
-    // post: Post
+  @Column()
+  password: string;
 
+  @OneToMany((_type) => Post, (post: Post) => post.author, {
+    onUpdate: "CASCADE",
+  })
+  @JoinColumn()
+  posts!: Array<Post>;
+
+  @OneToMany((_type) => Comment, (comment: Comment) => comment.author, {
+    onUpdate: "CASCADE",
+  })
+  @JoinColumn()
+  comments!: Array<Comment>;
 }

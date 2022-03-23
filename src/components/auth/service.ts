@@ -31,19 +31,23 @@ const redisClient = createClient({
 
 const register = async (name: string, username: string, password: string) => {
   const userRepository = getRepository(User);
+  const user = new User();
+  user.name = name;
+  user.username = username;
 
   const takenLogin = await userRepository.findOne({ username });
   if (takenLogin) throw new idTaken("This login is already taken");
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  user.password = await bcrypt.hash(password, 12);
 
-  const user = userSchema.parse({
-    name: name,
-    username: username,
-    password: hashedPassword,
+  const userCheck = userSchema.parse({
+    name: user.name,
+    username: user.username,
+    password: user.password,
   });
 
-  await userRepository.save(user);
+  if (userCheck) await userRepository.save(user);
+  return user;
 };
 
 const login = async (username: string, password: string) => {
@@ -57,10 +61,7 @@ const login = async (username: string, password: string) => {
   if (!bcrypt.compareSync(password, userPassword))
     throw new loginOrPasswordInvalid("Username or password are invalid");
 
-  userSchema.parse({
-    username: username,
-    password: password,
-  });
+  return findUser;
 };
 
 const logout = (session: Session) => {

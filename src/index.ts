@@ -10,6 +10,7 @@ import { createConnection } from "typeorm";
 //import authRouter from "./components/auth/router";
 import * as dbConfig from "../ormconfig";
 import authRouter from "./components/auth/router";
+import postsRouter from "./components/post/router";
 
 const PORT = 5050;
 const RedisStore = connectRedis(session);
@@ -53,6 +54,7 @@ createConnection(dbConfig.dbOptions).then(async () => {
   );
 
   app.use("/auth", authRouter);
+  app.use("/posts", postsRouter);
 
   app.listen(PORT);
   console.log(`App is running on port ${PORT}...`);
