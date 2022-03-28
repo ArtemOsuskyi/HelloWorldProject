@@ -16,15 +16,14 @@ export class Comment {
   @Column({
     type: "text",
   })
-  text: string;
+  text!: string;
 
   @Column({ name: "user_id", nullable: true })
-  userId!: number;
-  @ManyToOne(() => User, (user: User) => user)
+  @ManyToOne(() => User, (user: User) => user.comments)
   @JoinColumn()
   author: User;
 
-  @ManyToOne(() => Post)
+  @ManyToOne(() => Post, (post: Post) => post.comments)
   @JoinColumn({ name: "reply_post" })
   reply_post: Post;
 }

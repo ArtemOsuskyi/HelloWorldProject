@@ -6,7 +6,7 @@ const postSchema = z.object({
   text: z.string().min(3).max(2000, { message: "Text is too long" }),
 });
 
-export const validateBody = async (
+const validatePostBody = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -22,3 +22,11 @@ export const validateBody = async (
     return res.status(400).json({ message: e.errors });
   }
 };
+
+const validateCommentBody = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
+
+export { validatePostBody, validateCommentBody };

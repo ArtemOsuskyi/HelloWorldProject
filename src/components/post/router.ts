@@ -7,7 +7,7 @@ import {
   newPost,
   removePost,
 } from "./controller";
-import { validateBody } from "./middleware";
+import { validatePostBody } from "../middleware";
 
 const postsRouter = express.Router();
 
@@ -15,8 +15,8 @@ postsRouter
   .get("/", getAllPosts)
   .get("/:postid", getPost)
   .get("/user/:userid", getUserPosts)
-  .post("/create", validateBody, newPost)
-  .patch("/edit/:postid", validateBody, editPost)
+  .post("/create", validatePostBody, newPost)
+  .patch("/edit/:postid", validatePostBody, editPost)
   .delete("/delete/:postid", removePost);
 
 export default postsRouter;
