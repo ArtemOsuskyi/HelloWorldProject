@@ -4,33 +4,45 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/model";
+import { Comment } from "../comment/model";
 
 @Entity({ name: "posts" })
 export class Post {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn({ name: "created_at", type: "timestamp without time zone" })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: "updated_at", type: "timestamp without time zone" })
-  updatedAt: Date;
+  id!: number;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({
     type: "text",
   })
-  text: string;
+  text!: string;
 
-  @Column({ name: "user_id" })
-  userId: number;
   @ManyToOne((_type) => User, (user: User) => user.posts)
   @JoinColumn({ name: "author_id" })
-  author: User;
+  author!: User;
+
+  @OneToMany((_type) => Comment, (comment: Comment) => comment.reply_post, {
+    cascade: true,
+    nullable: true,
+  })
+  comments?: Array<Comment>;
+
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp without time zone",
+  })
+  createdAt?: Date;
+
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp without time zone",
+  })
+  updatedAt?: Date;
 }

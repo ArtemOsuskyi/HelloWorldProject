@@ -15,30 +15,30 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @CreateDateColumn({ name: "created_at" })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: "updated_at" })
-  updatedAt!: Date;
-
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
   username!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @OneToMany((_type) => Post, (post: Post) => post.author, {
-    onUpdate: "CASCADE",
+    nullable: true,
+    cascade: true,
   })
-  @JoinColumn()
-  posts!: Array<Post>;
+  posts: Array<Post>;
 
   @OneToMany((_type) => Comment, (comment: Comment) => comment.author, {
-    onUpdate: "CASCADE",
+    nullable: true,
   })
   @JoinColumn()
-  comments!: Array<Comment>;
+  comments: Array<Comment>;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt: Date;
 }
