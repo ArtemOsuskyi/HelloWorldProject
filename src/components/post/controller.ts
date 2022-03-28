@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+  changePost,
   createPost,
   deletePost,
   findPost,
@@ -57,9 +58,28 @@ const newPost = async (req: Request, res: Response) => {
   } else return res.status(401).json({ message: "Unauthorized request" });
 };
 
-// const editPost = async (req: Request, res: Response) => {
-//   //TODO: editPost service
-// };
+const editPost = async (req: Request, res: Response) => {
+  const session: SessionData = req.session;
+  const id = req.params.postid;
+  const { title, text } = req.body;
+  if (session.authenticated) {
+    await findPost(Number(id))
+      .then(async (post) => {
+        if (post.author.id === session.userId) {
+          await changePost(Number(id), title, text).then((post) => {
+            return res.status(200).json({ post });
+          });
+        } else throw new NotOwnPost("Can't delete not your post");
+      })
+      .catch((e) => {
+        if (e instanceof PostNotFound)
+          return res.status(400).json({ message: e.message });
+        else if (e instanceof NotOwnPost)
+          return res.status(400).json({ message: e.message });
+        else return res.status(500).json({ message: "Something went wrong" });
+      });
+  } else return res.status(401).json({ message: "Unauthorized request" });
+};
 
 const removePost = async (req: Request, res: Response) => {
   const session: SessionData = req.session;
@@ -86,4 +106,4 @@ const removePost = async (req: Request, res: Response) => {
   } else return res.status(401).json({ message: "Unauthorized request" });
 };
 
-export { getPost, getUserPosts, getAllPosts, newPost, removePost };
+export { getPost, getUserPosts, getAllPosts, newPost, editPost, removePost };

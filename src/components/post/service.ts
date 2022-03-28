@@ -1,12 +1,6 @@
 import { getRepository } from "typeorm";
 import { Post } from "./model";
 
-// TODO: put schema validation in controller
-// const postSchema = z.object({
-//   title: z.string().min(1).max(200, { message: "Title is too long" }),
-//   text: z.string().min(1).max(2000, { message: "Text is too long" }),
-// });
-
 const showPost = async (postId: number) => {
   return findPost(postId).catch((e) => {
     throw new Error(e);
@@ -33,13 +27,19 @@ const createPost = async (title: string, text: string, userId: number) => {
   });
 };
 
-// const editPost = async (postId: number) => {
-//   await findPost(postId);
-// };
+const changePost = async (postId: number, title?: string, text?: string) => {
+  await getRepository(Post).update(
+    { id: postId },
+    {
+      title,
+      text,
+    }
+  );
+  return getRepository(Post).findOne({ id: postId });
+};
 
 const deletePost = async (postId: number) => {
-  const postRepository = getRepository(Post);
-  return postRepository.delete({ id: postId });
+  return getRepository(Post).delete({ id: postId });
 };
 
 const findPost = async (postId: number) => {
@@ -68,6 +68,7 @@ export {
   showUserPosts,
   showAllPosts,
   createPost,
+  changePost,
   deletePost,
   shortenPosts,
   findPost,

@@ -15,7 +15,7 @@ const userSchema = z.object({
     .max(50, { message: "Name is too long" })
     .optional(),
   username:
-    z.string().email() ||
+    z.string().email() ??
     z.string().regex(phonePattern, {
       message: "Username must be email or phone number",
     }),
