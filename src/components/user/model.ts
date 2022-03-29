@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -33,7 +32,6 @@ export class User {
   @OneToMany((_type) => Comment, (comment: Comment) => comment.author, {
     nullable: true,
   })
-  @JoinColumn()
   comments: Array<Comment>;
 
   @CreateDateColumn({ name: "created_at" })

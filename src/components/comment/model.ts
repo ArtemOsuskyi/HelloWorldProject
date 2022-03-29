@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/model";
 import { Post } from "../post/model";
@@ -18,12 +20,23 @@ export class Comment {
   })
   text!: string;
 
-  @Column({ name: "user_id", nullable: true })
   @ManyToOne(() => User, (user: User) => user.comments)
-  @JoinColumn()
-  author: User;
+  @JoinColumn({ name: "author_id" })
+  author!: User;
 
   @ManyToOne(() => Post, (post: Post) => post.comments)
   @JoinColumn({ name: "reply_post" })
-  reply_post: Post;
+  reply_post!: Post;
+
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp without time zone",
+  })
+  createdAt?: Date;
+
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp without time zone",
+  })
+  updatedAt?: Date;
 }

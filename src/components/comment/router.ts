@@ -2,7 +2,7 @@ import * as express from "express";
 import {
   createComment,
   editComment,
-  getComment,
+  getPostComments,
   removeComment,
 } from "./controller";
 import { validateCommentBody } from "../middleware";
@@ -10,7 +10,7 @@ import { validateCommentBody } from "../middleware";
 const commentsRouter = express.Router();
 
 commentsRouter
-  .get("/:commentid", getComment)
+  .get("/:postid", getPostComments)
   .post("/create/:postid", validateCommentBody, createComment)
   .patch("/:commentid", validateCommentBody, editComment)
   .delete("/:commentid", removeComment);
