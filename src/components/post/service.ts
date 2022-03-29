@@ -3,13 +3,13 @@ import { Post } from "./model";
 
 const showPost = async (postId: number) => {
   return findPost(postId).catch((e) => {
-    throw new Error(e);
+    throw new PostNotFound(e.message);
   });
 };
 
 const showUserPosts = async (userId: number) => {
   return findUserPosts(userId).catch((e) => {
-    throw new Error(e);
+    throw new PostNotFound(e.message);
   });
 };
 
@@ -78,6 +78,7 @@ export class PostNotFound extends Error {
   constructor(message) {
     super(message);
     this.name = "PostNotFoundError";
+    this.message = "Post doesn't exist";
   }
 }
 
