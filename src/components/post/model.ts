@@ -10,6 +10,8 @@ import {
 } from "typeorm";
 import { User } from "../user/model";
 import { Comment } from "../comment/model";
+import { PolymorphicChildren } from "typeorm-polymorphic";
+import { Like } from "../like/model";
 
 @Entity({ name: "posts" })
 export class Post {
@@ -33,6 +35,9 @@ export class Post {
     nullable: true,
   })
   comments?: Array<Comment>;
+
+  @PolymorphicChildren(() => Like)
+  adverts: Like;
 
   @CreateDateColumn({
     name: "created_at",

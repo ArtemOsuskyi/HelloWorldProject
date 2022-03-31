@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { User } from "../user/model";
 import { Post } from "../post/model";
+import { PolymorphicChildren } from "typeorm-polymorphic";
+import { Like } from "../like/model";
 
 @Entity({ name: "comments" })
 export class Comment {
@@ -27,6 +29,9 @@ export class Comment {
   @ManyToOne(() => Post, (post: Post) => post.comments)
   @JoinColumn({ name: "reply_post" })
   reply_post!: Post;
+
+  @PolymorphicChildren(() => Like)
+  adverts: Like;
 
   @CreateDateColumn({
     name: "created_at",
