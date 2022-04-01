@@ -40,14 +40,14 @@ const logout = (session: Session) => {
 export { register, login, logout };
 
 export class idTaken extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = "IdTakenError";
   }
 }
 
 export class loginOrPasswordInvalid extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = "LoginPasswordInvalidationError";
   }

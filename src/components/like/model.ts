@@ -1,20 +1,30 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PolymorphicChildInterface } from "typeorm-polymorphic/dist/polymorphic.interface";
-import { PolymorphicParent } from "typeorm-polymorphic";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Post } from "../post/model";
 import { Comment } from "../comment/model";
 import { User } from "../user/model";
 
 @Entity({ name: "likes" })
-export class Like implements PolymorphicChildInterface {
-  @PolymorphicParent(() => [Post, Comment])
-  owner: Post | Comment;
+export class Like {
+  @PrimaryGeneratedColumn({ name: "like_id" })
+  likeId!: number;
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ManyToOne((_type) => Post, (post: Post) => post.likes)
+  @JoinColumn()
+  post: Post;
+
+  @ManyToOne((_type) => Comment, (comment: Comment) => comment.likes)
+  @JoinColumn()
+  comment: Comment;
 
   @ManyToOne((_type) => User, (user: User) => user.likes)
-  liker: User;
+  @JoinColumn()
+  liker!: User;
 
   @Column()
   entityId: number;

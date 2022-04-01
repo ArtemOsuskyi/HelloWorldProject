@@ -12,8 +12,8 @@ import { Like } from "../like/model";
 
 @Entity({ name: "users" })
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn({ name: "user_id" })
+  userId!: number;
 
   @Column()
   name!: string;

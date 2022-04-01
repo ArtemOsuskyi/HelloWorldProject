@@ -41,7 +41,7 @@ createConnection(dbConfig.dbOptions).then(async () => {
 
   app.use(
     session({
-      secret: process.env.SECRET_WORD,
+      secret: process.env.SECRET_WORD || "omegaubersecretword",
       store: new RedisStore({ client: redisClient }),
       resave: false,
       saveUninitialized: false,

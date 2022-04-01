@@ -23,40 +23,40 @@ const createPost = async (title: string, text: string, userId: number) => {
   return postRepository.save({
     title,
     text,
-    author: { id: userId },
+    author: { userId },
   });
 };
 
 const changePost = async (postId: number, title?: string, text?: string) => {
   await getRepository(Post).update(
-    { id: postId },
+    { postId: postId },
     {
       title,
       text,
     }
   );
-  return getRepository(Post).findOne({ id: postId });
+  return getRepository(Post).findOne({ postId: postId });
 };
 
 const deletePost = async (postId: number) => {
-  return getRepository(Post).delete({ id: postId });
+  return getRepository(Post).delete({ postId: postId });
 };
 
 const findPost = async (postId: number) => {
   const postRepository = getRepository(Post);
   const findPost = await postRepository.findOne(postId, {
-    relations: ["author"],
+    relations: ["author", "likes", "comments", "likes.liker"],
   });
   if (findPost) return findPost;
   else throw new PostNotFound("Post doesn't exist");
 };
 
 const findUserPosts = async (userId: number) =>
-  getRepository(Post).find({ author: { id: userId } });
+  getRepository(Post).find({ author: { userId: userId } });
 
 const shortenPosts = async (array: Post[]) => {
   return array.map((post) => {
-    delete post.id;
+    delete post.postId;
     delete post.createdAt;
     if (post.text.length >= 200) post.text = post.text.slice(200) + "...";
     return post;
@@ -75,7 +75,7 @@ export {
 };
 
 export class PostNotFound extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = "PostNotFoundError";
     this.message = "Post doesn't exist";
@@ -83,7 +83,7 @@ export class PostNotFound extends Error {
 }
 
 export class NotOwnPost extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
     this.name = "NotOwnPostError";
   }

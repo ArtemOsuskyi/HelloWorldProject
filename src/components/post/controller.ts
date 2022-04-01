@@ -65,7 +65,7 @@ const editPost = async (req: Request, res: Response) => {
   if (session.authenticated) {
     await findPost(Number(id))
       .then(async (post) => {
-        if (post.author.id === session.userId) {
+        if (post.author.userId === session.userId) {
           await changePost(Number(id), title, text).then((post) => {
             return res.status(200).json({ post });
           });
@@ -87,7 +87,7 @@ const removePost = async (req: Request, res: Response) => {
   if (session.authenticated) {
     await findPost(Number(postid))
       .then(async (post) => {
-        if (post.author.id === session.userId) {
+        if (post.author.userId === session.userId) {
           const removedPost = post;
           await deletePost(Number(postid)).then(() => {
             return res

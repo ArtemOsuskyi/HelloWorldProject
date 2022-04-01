@@ -10,13 +10,12 @@ import {
 } from "typeorm";
 import { User } from "../user/model";
 import { Comment } from "../comment/model";
-import { PolymorphicChildren } from "typeorm-polymorphic";
 import { Like } from "../like/model";
 
 @Entity({ name: "posts" })
 export class Post {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn({ name: "post_id" })
+  postId!: number;
 
   @Column()
   title!: string;
@@ -34,10 +33,13 @@ export class Post {
     cascade: true,
     nullable: true,
   })
-  comments?: Array<Comment>;
+  comments: Array<Comment>;
 
-  @PolymorphicChildren(() => Like)
-  adverts: Like;
+  @OneToMany((_type) => Like, (like: Like) => like.post, {
+    cascade: true,
+    nullable: true,
+  })
+  likes: Array<Like>;
 
   @CreateDateColumn({
     name: "created_at",

@@ -4,18 +4,18 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/model";
 import { Post } from "../post/model";
-import { PolymorphicChildren } from "typeorm-polymorphic";
 import { Like } from "../like/model";
 
 @Entity({ name: "comments" })
 export class Comment {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ name: "comment_id" })
+  commentId!: number;
 
   @Column({
     type: "text",
@@ -30,8 +30,11 @@ export class Comment {
   @JoinColumn({ name: "reply_post" })
   reply_post!: Post;
 
-  @PolymorphicChildren(() => Like)
-  adverts: Like;
+  @OneToMany(() => Like, (like: Like) => like.comment, {
+    cascade: true,
+    nullable: true,
+  })
+  likes: Array<Like>;
 
   @CreateDateColumn({
     name: "created_at",
