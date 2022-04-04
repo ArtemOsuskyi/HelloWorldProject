@@ -42,9 +42,10 @@ const signin = async (req: Request, res: Response) => {
     .catch((e) => {
       if (e instanceof loginOrPasswordInvalid)
         return res.status(400).json({ error: e.message });
-      return res
-        .status(500)
-        .json({ message: "Something gone wrong, please try again", error: e });
+      return res.status(500).json({
+        message: "Something gone wrong, please try again",
+        error: e.message,
+      });
     });
 };
 

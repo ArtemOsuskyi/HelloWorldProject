@@ -21,7 +21,7 @@ export class User {
   @Column()
   username!: string;
 
-  @Column()
+  @Column({ select: false })
   password!: string;
 
   @OneToMany((_type) => Post, (post: Post) => post.author, {

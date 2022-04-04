@@ -1,9 +1,17 @@
 import { getRepository } from "typeorm";
 import { Comment } from "./model";
 
-const showPostComments = async (postId: number) => {
+const showPostComments = async (
+  postId: number,
+  skip: number,
+  offset: number
+) => {
   return getRepository(Comment).find({
-    reply_post: { postId: postId },
+    where: {
+      reply_post: { postId },
+    },
+    skip,
+    take: offset,
   });
 };
 

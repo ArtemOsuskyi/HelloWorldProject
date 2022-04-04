@@ -23,7 +23,12 @@ const register = async (name: string, username: string, password: string) => {
 };
 
 const login = async (username: string, password: string) => {
-  const findUser = await getRepository(User).findOne({ username });
+  const findUser = await getRepository(User).findOne(
+    { username },
+    {
+      select: ["password"],
+    }
+  );
   if (!findUser)
     throw new loginOrPasswordInvalid("Username or password are invalid");
 

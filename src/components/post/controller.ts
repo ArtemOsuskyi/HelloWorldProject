@@ -15,9 +15,9 @@ import { SessionData } from "express-session";
 
 const getPost = async (req: Request, res: Response) => {
   const session: SessionData = req.session;
-  const id = req.params.postid;
+  const id = parseInt(req.params.postid);
   if (session.authenticated) {
-    await showPost(Number(id)).then((post) => {
+    await showPost(id).then((post) => {
       return res.status(200).json({ post });
     });
   } else return res.status(401).json({ message: "Unauthorized request" });
@@ -35,9 +35,11 @@ const getAllPosts = async (req: Request, res: Response) => {
 
 const getUserPosts = async (req: Request, res: Response) => {
   const session: SessionData = req.session;
-  const id = req.params.userid;
+  const id = parseInt(req.params.userid);
+  const skip = parseInt(req.query.skip as string) || 0;
+  const offset = parseInt(req.query.offset as string) || 30;
   if (session.authenticated) {
-    await showUserPosts(Number(id)).then(async (posts) => {
+    await showUserPosts(id, skip, offset).then(async (posts) => {
       const result = await shortenPosts(posts);
       return res.status(200).json({ result });
     });

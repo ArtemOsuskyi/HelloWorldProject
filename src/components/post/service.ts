@@ -7,8 +7,8 @@ const showPost = async (postId: number) => {
   });
 };
 
-const showUserPosts = async (userId: number) => {
-  return findUserPosts(userId).catch((e) => {
+const showUserPosts = async (userId: number, skip: number, offset: number) => {
+  return findUserPosts(userId, skip, offset).catch((e) => {
     throw new PostNotFound(e.message);
   });
 };
@@ -51,8 +51,12 @@ const findPost = async (postId: number) => {
   else throw new PostNotFound("Post doesn't exist");
 };
 
-const findUserPosts = async (userId: number) =>
-  getRepository(Post).find({ author: { userId: userId } });
+const findUserPosts = async (userId: number, skip: number, offset: number) =>
+  getRepository(Post).find({
+    where: { author: userId },
+    skip,
+    take: offset,
+  });
 
 const shortenPosts = async (array: Post[]) => {
   return array.map((post) => {

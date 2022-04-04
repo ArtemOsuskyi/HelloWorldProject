@@ -13,9 +13,11 @@ import { findPost } from "../post/service";
 
 const getPostComments = async (req: Request, res: Response) => {
   const session: SessionData = req.session;
-  const id = req.params.postid;
+  const id = parseInt(req.params.postid);
+  const skip = parseInt(req.query.skip as string) || 0;
+  const offset = parseInt(req.query.offset as string) || 30;
   if (session.authenticated) {
-    await showPostComments(Number(id)).then((comments) => {
+    await showPostComments(id, skip, offset).then(async (comments) => {
       return res.status(200).json({ comments });
     });
   } else return res.status(401).json({ message: "Unauthorized request" });
@@ -24,7 +26,7 @@ const getPostComments = async (req: Request, res: Response) => {
 const createComment = async (req: Request, res: Response) => {
   const session: SessionData = req.session;
   const id = req.params.postid;
-  const text = req.body;
+  const { text } = req.body;
   if (session.authenticated) {
     await findPost(Number(id))
       .then(async (post) => {
