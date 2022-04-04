@@ -20,11 +20,12 @@ const userSchema = z.object({
     .nonempty()
     .min(2, { message: "Name is too short" })
     .max(50, { message: "Name is too long" }),
-  username:
-    z.string().email() ??
+  username: z.union([
+    z.string().email(),
     z.string().regex(phonePattern, {
       message: "Username must be either an email or a phone number",
     }),
+  ]),
   password: z.string().min(6).max(100).regex(passPattern, {
     message:
       "Password must contain at least 5 characters in both cases and at least 1 number",

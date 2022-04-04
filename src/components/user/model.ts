@@ -8,11 +8,12 @@ import {
 } from "typeorm";
 import { Post } from "../post/model";
 import { Comment } from "../comment/model";
+import { Like } from "../like/model";
 
 @Entity({ name: "users" })
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn({ name: "user_id" })
+  userId!: number;
 
   @Column()
   name!: string;
@@ -33,6 +34,11 @@ export class User {
     nullable: true,
   })
   comments: Array<Comment>;
+
+  @OneToMany((_type) => Like, (like: Like) => like.liker, {
+    nullable: true,
+  })
+  likes: Array<Like>;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;

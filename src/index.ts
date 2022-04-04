@@ -7,11 +7,11 @@ import { createClient } from "redis";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 
-//import authRouter from "./components/auth/router";
 import * as dbConfig from "../ormconfig";
 import authRouter from "./components/auth/router";
 import postsRouter from "./components/post/router";
 import commentsRouter from "./components/comment/router";
+import likesRouter from "./components/like/router";
 
 const PORT = 5050;
 const RedisStore = connectRedis(session);
@@ -41,7 +41,7 @@ createConnection(dbConfig.dbOptions).then(async () => {
 
   app.use(
     session({
-      secret: process.env.SECRET_WORD,
+      secret: process.env.SECRET_WORD || "omegaubersecretword",
       store: new RedisStore({ client: redisClient }),
       resave: false,
       saveUninitialized: false,
@@ -57,6 +57,7 @@ createConnection(dbConfig.dbOptions).then(async () => {
   app.use("/auth", authRouter);
   app.use("/posts", postsRouter);
   app.use("/comments", commentsRouter);
+  app.use("/like", likesRouter);
 
   app.listen(PORT);
   console.log(`App is running on port ${PORT}...`);

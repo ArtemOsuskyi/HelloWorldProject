@@ -28,7 +28,7 @@ const createComment = async (req: Request, res: Response) => {
   if (session.authenticated) {
     await findPost(Number(id))
       .then(async (post) => {
-        await newComment(post.id, text, session.userId).then((comment) => {
+        await newComment(post.postId, text, session.userId).then((comment) => {
           return res.status(200).json({ message: "Comment posted", comment });
         });
       })
@@ -47,8 +47,8 @@ const editComment = async (req: Request, res: Response) => {
   if (session.authenticated) {
     await findComment(Number(id))
       .then(async (comment) => {
-        if (comment.author.id === session.userId) {
-          await changeComment(comment.id, text).then((comment) => {
+        if (comment.author.userId === session.userId) {
+          await changeComment(comment.commentId, text).then((comment) => {
             return res.status(200).json({ comment });
           });
         } else throw new NotOwnComment("Can't edit not your comment");
@@ -69,9 +69,9 @@ const removeComment = async (req: Request, res: Response) => {
   if (session.authenticated) {
     await findComment(Number(id))
       .then(async (comment) => {
-        if (comment.author.id === session.userId) {
+        if (comment.author.userId === session.userId) {
           const removedComment = comment;
-          await deleteComment(comment.id).then(() => {
+          await deleteComment(comment.commentId).then(() => {
             return res.status(200).json({ removedComment });
           });
         } else throw new NotOwnComment("Can't edit not your comment");

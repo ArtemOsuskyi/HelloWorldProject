@@ -14,7 +14,7 @@ const signup = async (req: Request, res: Response) => {
 
   await register(name, username, password)
     .then((userData) => {
-      session.userId = userData.id;
+      session.userId = userData.userId;
       session.authenticated = true;
       return res.status(200).json({ message: "Signup successful", session });
     })
@@ -33,7 +33,7 @@ const signin = async (req: Request, res: Response) => {
 
   await login(username, password)
     .then((userData) => {
-      session.userId = userData.id;
+      session.userId = userData.userId;
       session.authenticated = true;
       return res
         .status(200)

@@ -1,14 +1,34 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Post } from "../post/model";
+import { Comment } from "../comment/model";
 import { User } from "../user/model";
 
 @Entity({ name: "likes" })
 export class Like {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn({ name: "like_id" })
+  likeId!: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne((_type) => Post, (post: Post) => post.likes)
   @JoinColumn()
-  user: User;
+  post: Post;
 
-  //TODO: more columns
+  @ManyToOne((_type) => Comment, (comment: Comment) => comment.likes)
+  @JoinColumn()
+  comment: Comment;
+
+  @ManyToOne((_type) => User, (user: User) => user.likes)
+  @JoinColumn()
+  liker!: User;
+
+  @Column()
+  entityId: number;
+
+  @Column()
+  entityType: string;
 }
