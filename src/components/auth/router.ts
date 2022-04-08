@@ -1,12 +1,13 @@
 import * as express from "express";
 import { signin, signout, signup } from "./controller";
-import { validateAuthBody, validateUserBody } from "../middleware";
+import { authSchema, validateRequest } from "../middleware";
+import { createUserSchema } from "../user/schema";
 
 const authRouter = express.Router();
 
 authRouter
-  .post("/register", validateUserBody, signup)
-  .post("/login", validateAuthBody, signin)
+  .post("/register", validateRequest(createUserSchema), signup)
+  .post("/login", validateRequest(authSchema), signin)
   .post("/logout", signout);
 
 export default authRouter;

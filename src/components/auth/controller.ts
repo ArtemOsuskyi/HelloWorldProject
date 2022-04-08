@@ -19,11 +19,11 @@ const signup = async (req: Request, res: Response) => {
       return res.status(200).json({ message: "Signup successful", session });
     })
     .catch((e) => {
-      if (e instanceof idTaken)
-        return res.status(400).json({ message: e.message });
-      return res
-        .status(500)
-        .json({ message: "Something gone wrong, please try again", error: e });
+      if (e instanceof idTaken) return res.status(400).json(e.message);
+      return res.status(500).json({
+        message: "Something gone wrong, please try again",
+        error: e.message,
+      });
     });
 };
 

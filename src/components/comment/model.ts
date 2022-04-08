@@ -22,11 +22,15 @@ export class Comment {
   })
   text!: string;
 
-  @ManyToOne(() => User, (user: User) => user.comments)
+  @ManyToOne(() => User, (user: User) => user.comments, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "author_id" })
   author!: User;
 
-  @ManyToOne(() => Post, (post: Post) => post.comments)
+  @ManyToOne(() => Post, (post: Post) => post.comments, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "reply_post" })
   reply_post!: Post;
 

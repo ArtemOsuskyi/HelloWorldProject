@@ -14,15 +14,21 @@ export class Like {
   @PrimaryGeneratedColumn({ name: "like_id" })
   likeId!: number;
 
-  @ManyToOne((_type) => Post, (post: Post) => post.likes)
+  @ManyToOne((_type) => Post, (post: Post) => post.likes, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   post: Post;
 
-  @ManyToOne((_type) => Comment, (comment: Comment) => comment.likes)
+  @ManyToOne((_type) => Comment, (comment: Comment) => comment.likes, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   comment: Comment;
 
-  @ManyToOne((_type) => User, (user: User) => user.likes)
+  @ManyToOne((_type) => User, (user: User) => user.likes, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   liker!: User;
 

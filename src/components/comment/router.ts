@@ -5,14 +5,15 @@ import {
   getPostComments,
   removeComment,
 } from "./controller";
-import { validateCommentBody } from "../middleware";
+import { validateRequest } from "../middleware";
+import { createCommentSchema } from "./schema";
 
 const commentsRouter = express.Router();
 
 commentsRouter
   .get("/:postid", getPostComments)
-  .post("/create/:postid", validateCommentBody, createComment)
-  .patch("/:commentid", validateCommentBody, editComment)
+  .post("/create/:postid", validateRequest(createCommentSchema), createComment)
+  .patch("/:commentid", validateRequest(createCommentSchema), editComment)
   .delete("/:commentid", removeComment);
 
 export default commentsRouter;

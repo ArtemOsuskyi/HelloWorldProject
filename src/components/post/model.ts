@@ -25,7 +25,9 @@ export class Post {
   })
   text!: string;
 
-  @ManyToOne((_type) => User, (user: User) => user.posts)
+  @ManyToOne((_type) => User, (user: User) => user.posts, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "author_id" })
   author!: User;
 

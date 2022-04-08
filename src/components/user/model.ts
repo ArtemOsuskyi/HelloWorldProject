@@ -32,11 +32,13 @@ export class User {
 
   @OneToMany((_type) => Comment, (comment: Comment) => comment.author, {
     nullable: true,
+    cascade: true,
   })
   comments: Array<Comment>;
 
   @OneToMany((_type) => Like, (like: Like) => like.liker, {
     nullable: true,
+    cascade: true,
   })
   likes: Array<Like>;
 
