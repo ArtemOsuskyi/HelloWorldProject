@@ -1,26 +1,57 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
-import {User} from "../user/model";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { User } from "../user/model";
+import { Comment } from "../comment/model";
+import { Like } from "../like/model";
 
-@Entity()
+@Entity({ name: "posts" })
 export class Post {
+  @PrimaryGeneratedColumn({ name: "post_id" })
+  postId!: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  title!: string;
 
-    @Column({type: "timestamp without time zone"})
-    created: Date
+  @Column({
+    type: "text",
+  })
+  text!: string;
 
-    @Column({name: "last_edited", type: "timestamp without time zone"})
-    lastEdited: Date
+  @ManyToOne((_type) => User, (user: User) => user.posts, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "author_id" })
+  author!: User;
 
-    @Column()
-    title: string
+  @OneToMany((_type) => Comment, (comment: Comment) => comment.reply_post, {
+    cascade: true,
+    nullable: true,
+  })
+  comments: Array<Comment>;
 
-    @Column()
-    text: string
+  @OneToMany((_type) => Like, (like: Like) => like.post, {
+    cascade: true,
+    nullable: true,
+  })
+  likes: Array<Like>;
 
-    // @ManyToOne( () => User, user = user.post, {cascade: true})
-    // @JoinColumn({name: "creator_id"})
-    // creator: User
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp without time zone",
+  })
+  createdAt?: Date;
 
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp without time zone",
+  })
+  updatedAt?: Date;
 }
